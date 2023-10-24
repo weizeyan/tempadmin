@@ -1,0 +1,223 @@
+@import './flex.less';
+@import './common.less';
+
+* {
+  box-sizing: border-box;
+}
+:root {
+  --el-color-primary: rgb(22, 93, 255);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  background-color: var(--color-bg-1);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+.echarts-tooltip-diy {
+  background: linear-gradient(
+    304.17deg,
+    rgba(253, 254, 255, 0.6) -6.04%,
+    rgba(244, 247, 252, 0.6) 85.2%
+  ) !important;
+  border: none !important;
+  backdrop-filter: blur(10px) !important;
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 6px !important;
+
+  .content-panel {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 9px;
+    background: rgba(255, 255, 255, 0.8);
+    width: 164px;
+    height: 32px;
+    line-height: 32px;
+    box-shadow: 6px 0px 20px rgba(34, 87, 188, 0.1);
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  .tooltip-title {
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .tooltip-title,
+  .tooltip-value {
+    font-size: 13px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #1d2129;
+    font-weight: bold;
+  }
+
+  .tooltip-item-icon {
+    display: inline-block;
+    margin-right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+}
+
+.general-card {
+  border-radius: 4px;
+  border: none;
+
+  & > .arco-card-header {
+    height: auto;
+    padding: 20px;
+    border: none;
+  }
+
+  & > .arco-card-body {
+    padding: 0 20px 20px 20px;
+  }
+}
+
+.split-line {
+  border-color: rgb(var(--gray-2));
+}
+
+.arco-table-cell {
+  .circle {
+    display: inline-block;
+    margin-right: 4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgb(var(--blue-6));
+
+    &.pass {
+      background-color: rgb(var(--green-6));
+    }
+    &.disabled {
+      background-color: rgb(var(--gray-4));
+    }
+  }
+}
+.arco-empty {
+  padding: 80px 0;
+  .text {
+    font-size: 18px;
+  }
+}
+.b-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  &.b-dot-green {
+    background-color: rgb(var(--green-6));
+  }
+  &.b-dot-red {
+    background-color: rgb(var(--red-6));
+  }
+  &.b-dot-orange {
+    background-color: rgb(var(--orange-6));
+  }
+  &.b-dot-gray {
+    background-color: rgb(var(--gray-4));
+  }
+}
+.b-status-green {
+  color: rgb(var(--green-6));
+}
+
+.b-status-red {
+  color: rgb(var(--red-6));
+}
+.b-status-orange {
+  color: rgb(var(--orange-6));
+}
+
+.b-status-gray {
+  color: rgb(var(--gray-6));
+}
+
+.arco-table-tr.status-red {
+  &:hover .arco-table-td,
+  .arco-table-td {
+    background-color: rgb(var(--red-7)) !important;
+    color: #fff;
+    a {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+  &:hover .arco-table-td.arco-table-col-fixed-left::before,
+  &:hover .arco-table-td.arco-table-col-fixed-right::before {
+    background-color: rgb(var(--red-7)) !important;
+  }
+}
+
+.option-selected.arco-select-option {
+  background-color: var(--color-fill-2);
+}
+
+.b-file-list {
+  flex-wrap: wrap;
+  .file-item {
+    width: calc(33% - 8px);
+    margin-right: 10px;
+    padding-bottom: 10px;
+
+    .con {
+      border: 1px solid rgb(var(--primary-6));
+      padding: 10px;
+      border-radius: 5px;
+      position: relative;
+
+      a {
+        text-decoration: none;
+        color: rgb(var(--color-text-2));
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 200px;
+      }
+      .arco-icon-delete {
+        cursor: pointer;
+        font-size: 16px;
+        display: none;
+      }
+      &:hover {
+        .arco-icon-delete {
+          display: block;
+        }
+      }
+
+      .uploading-status {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 5px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(var(--primary-6));
+      }
+    }
+  }
+}
+
+.arco-message-list-top {
+  top: 50%;
+  transform: translateY(-50%);
+}

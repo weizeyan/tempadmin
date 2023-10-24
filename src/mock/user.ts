@@ -1,0 +1,492 @@
+import Mock from 'mockjs';
+import setupMock, {
+  successResponseWrap,
+  failResponseWrap,
+} from '@/utils/setup-mock';
+
+import { MockParams } from '@/types/mock';
+import { isLogin } from '@/utils/auth';
+
+setupMock({
+  setup() {
+    // Mock.XHR.prototype.withCredentials = true;
+
+    // 用户信息
+    Mock.mock(new RegExp('/api/user/info'), () => {
+      if (isLogin()) {
+        const role = window.localStorage.getItem('userRole') || 'admin';
+        return successResponseWrap({
+          name: '王立群',
+          avatar:
+            '//lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
+          email: 'wangliqun@email.com',
+          job: 'frontend',
+          jobName: '前端艺术家',
+          organization: 'Frontend',
+          organizationName: '前端',
+          location: 'beijing',
+          locationName: '北京',
+          introduction: '人潇洒，性温存',
+          personalWebsite: 'https://www.arco.design',
+          phone: '150****0000',
+          registrationDate: '2013-05-10 12:10:00',
+          accountId: '15012312300',
+          certification: 1,
+          role,
+        });
+      }
+      return failResponseWrap(null, '未登录', 50008);
+    });
+
+    // 登录
+    Mock.mock(new RegExp('/api/user/login'), (params: MockParams) => {
+      const { username, password } = JSON.parse(params.body);
+      if (!username) {
+        return failResponseWrap(null, '用户名不能为空', 50000);
+      }
+      if (!password) {
+        return failResponseWrap(null, '密码不能为空', 50000);
+      }
+      if (username === 'admin' && password === 'admin') {
+        window.localStorage.setItem('userRole', 'admin');
+        return successResponseWrap({
+          token: '12345',
+        });
+      }
+      if (username === 'user' && password === 'user') {
+        window.localStorage.setItem('userRole', 'user');
+        return successResponseWrap({
+          token: '54321',
+        });
+      }
+      return failResponseWrap(null, '账号或者密码错误', 50000);
+    });
+
+    // 登出
+    Mock.mock(new RegExp('/api/user/logout'), () => {
+      return successResponseWrap(null);
+    });
+
+    // 用户的服务端菜单
+    Mock.mock(new RegExp('/api/user/menu'), () => {
+      const menuList = [
+        {
+          menuId: 7,
+          path: '/exception',
+          name: 'Exception',
+          menuType: 'M',
+          title: '异常页',
+          key: 'Exception',
+          redirect: null,
+          meta: {
+            locale: '异常页',
+            icon: 'icon-exclamation-circle',
+            order: -1,
+            requiresAuth: 'true',
+            activeMenu: null,
+            titleQuery: '',
+            hideInMenu: null,
+            hideChildrenInMenu: null,
+            noAffix: null,
+            ignoreCache: null,
+            roles: null,
+          },
+          accessFlag: '0',
+          children: [
+            {
+              menuId: 8,
+              path: '403',
+              name: '403',
+              menuType: 'M',
+              title: '403',
+              key: '403',
+              redirect: '403',
+              meta: {
+                locale: '403',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: 'true',
+                hideChildrenInMenu: null,
+                noAffix: 'true',
+                ignoreCache: null,
+                roles: ['*'],
+              },
+              accessFlag: '0',
+              children: [],
+            },
+            {
+              menuId: 9,
+              path: '404',
+              name: '404',
+              menuType: 'M',
+              title: '404',
+              key: '404',
+              redirect: '404',
+              meta: {
+                locale: '404',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: 'true',
+                hideChildrenInMenu: null,
+                noAffix: 'true',
+                ignoreCache: null,
+                roles: ['*'],
+              },
+              accessFlag: '0',
+              children: [],
+            },
+            {
+              menuId: 10,
+              path: '500',
+              name: '500',
+              menuType: 'M',
+              title: '500',
+              key: '500',
+              redirect: '500',
+              meta: {
+                locale: '500',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: 'true',
+                hideChildrenInMenu: null,
+                noAffix: 'true',
+                ignoreCache: null,
+                roles: ['*'],
+              },
+              accessFlag: '0',
+              children: [],
+            },
+          ],
+        },
+        {
+          menuId: 11,
+          path: '/dashboard',
+          name: 'Dashboard',
+          menuType: 'M',
+          title: 'CS Portal',
+          key: 'Dashboard',
+          redirect: '/dashboard/index',
+          meta: {
+            locale: 'CS Portal',
+            icon: 'icon-dashboard',
+            order: 0,
+            requiresAuth: 'true',
+            activeMenu: null,
+            titleQuery: '',
+            hideInMenu: null,
+            hideChildrenInMenu: null,
+            noAffix: null,
+            ignoreCache: null,
+            roles: null,
+          },
+          accessFlag: '0',
+          children: [
+            {
+              menuId: 12,
+              path: 'index',
+              name: 'DashboardIndex',
+              menuType: 'M',
+              title: '欢迎页',
+              key: 'DashboardIndex',
+              redirect: null,
+              meta: {
+                locale: '欢迎页',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: 'Dashboard',
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: 'true',
+                ignoreCache: null,
+                roles: ['*'],
+              },
+              accessFlag: '0',
+              children: [],
+            },
+          ],
+        },
+        {
+          menuId: 13,
+          path: '/claim',
+          name: 'Claim',
+          menuType: 'M',
+          title: '理赔管理',
+          key: 'Claim',
+          redirect: null,
+          meta: {
+            locale: '理赔管理',
+            icon: 'icon-list',
+            order: 1,
+            requiresAuth: 'true',
+            activeMenu: null,
+            titleQuery: '',
+            hideInMenu: null,
+            hideChildrenInMenu: null,
+            noAffix: null,
+            ignoreCache: null,
+            roles: null,
+          },
+          accessFlag: '0',
+          children: [
+            {
+              menuId: 14,
+              path: 'list',
+              name: 'ClaimList',
+              menuType: 'M',
+              title: '理赔列表',
+              key: 'ClaimList',
+              redirect: null,
+              meta: {
+                locale: '理赔列表',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: null,
+                ignoreCache: null,
+                roles: ['*'],
+              },
+              accessFlag: '0',
+              children: [],
+            },
+          ],
+        },
+        {
+          menuId: 15,
+          path: '/system',
+          name: 'System',
+          menuType: 'M',
+          title: '系统设置',
+          key: 'System',
+          redirect: null,
+          meta: {
+            locale: '系统设置',
+            icon: 'icon-settings',
+            order: 5,
+            requiresAuth: 'true',
+            activeMenu: null,
+            titleQuery: '',
+            hideInMenu: null,
+            hideChildrenInMenu: null,
+            noAffix: null,
+            ignoreCache: null,
+            roles: null,
+          },
+          accessFlag: '0',
+          children: [
+            {
+              menuId: 16,
+              path: 'role',
+              name: 'SystemRole',
+              menuType: 'M',
+              title: '角色管理',
+              key: 'SystemRole',
+              redirect: '/system/role/list',
+              meta: {
+                locale: '角色管理',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: null,
+                ignoreCache: null,
+                roles: null,
+              },
+              accessFlag: '0',
+              children: [
+                {
+                  menuId: 17,
+                  path: 'list',
+                  name: 'SystemRoleList',
+                  menuType: 'M',
+                  title: '角色列表',
+                  key: 'SystemRoleList',
+                  redirect: '/system/role/list',
+                  meta: {
+                    locale: '角色列表',
+                    icon: null,
+                    order: null,
+                    requiresAuth: 'true',
+                    activeMenu: 'SystemRole',
+                    titleQuery: '',
+                    hideInMenu: null,
+                    hideChildrenInMenu: null,
+                    noAffix: null,
+                    ignoreCache: null,
+                    roles: null,
+                  },
+                  accessFlag: '0',
+                  children: [],
+                },
+                {
+                  menuId: 18,
+                  path: 'detail',
+                  name: 'SystemRoleDetail',
+                  menuType: 'M',
+                  title: '角色详情',
+                  key: 'SystemRoleDetail',
+                  redirect: '/system/role/detail',
+                  meta: {
+                    locale: '角色详情',
+                    icon: null,
+                    order: null,
+                    requiresAuth: 'true',
+                    activeMenu: 'SystemRole',
+                    titleQuery: '',
+                    hideInMenu: 'true',
+                    hideChildrenInMenu: null,
+                    noAffix: null,
+                    ignoreCache: null,
+                    roles: null,
+                  },
+                  accessFlag: '0',
+                  children: [],
+                },
+              ],
+            },
+            {
+              menuId: 19,
+              path: '/system/user',
+              name: 'SystemUser',
+              menuType: 'M',
+              title: '用户管理',
+              key: 'SystemUser',
+              redirect: null,
+              meta: {
+                locale: '用户管理',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: null,
+                ignoreCache: null,
+                roles: null,
+              },
+              accessFlag: '0',
+              children: [],
+            },
+            {
+              menuId: 20,
+              path: 'resource',
+              name: 'SystemResource',
+              menuType: 'M',
+              title: '资源管理',
+              key: 'SystemResource',
+              redirect: '/system/resource/list',
+              meta: {
+                locale: '资源管理',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: null,
+                ignoreCache: null,
+                roles: null,
+              },
+              accessFlag: '0',
+              children: [
+                {
+                  menuId: 21,
+                  path: 'list',
+                  name: 'SystemResourceList',
+                  menuType: 'M',
+                  title: '资源管理列表',
+                  key: 'SystemResourceList',
+                  redirect: '/system/resource/list',
+                  meta: {
+                    locale: '资源管理列表',
+                    icon: null,
+                    order: null,
+                    requiresAuth: 'true',
+                    activeMenu: 'SystemResource',
+                    titleQuery: '',
+                    hideInMenu: null,
+                    hideChildrenInMenu: null,
+                    noAffix: null,
+                    ignoreCache: null,
+                    roles: null,
+                  },
+                  accessFlag: '0',
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          menuId: 24,
+          path: '/testa',
+          name: 'TestA',
+          menuType: 'M',
+          title: '测试管理',
+          key: 'TestA',
+          redirect: null,
+          meta: {
+            locale: '测试管理',
+            icon: 'icon-list',
+            order: 1,
+            requiresAuth: 'true',
+            activeMenu: null,
+            titleQuery: '',
+            hideInMenu: null,
+            hideChildrenInMenu: null,
+            noAffix: null,
+            ignoreCache: null,
+            roles: null,
+          },
+          accessFlag: '0',
+          children: [
+            {
+              menuId: 37,
+              path: 'list',
+              name: 'TestAList',
+              menuType: 'M',
+              title: '测试列表',
+              key: 'TestAList',
+              redirect: null,
+              meta: {
+                locale: '测试列表',
+                icon: null,
+                order: null,
+                requiresAuth: 'true',
+                activeMenu: null,
+                titleQuery: '',
+                hideInMenu: null,
+                hideChildrenInMenu: null,
+                noAffix: null,
+                ignoreCache: null,
+                roles: null,
+              },
+              accessFlag: '0',
+              children: [],
+            },
+          ],
+        },
+      ];
+      return successResponseWrap(menuList);
+    });
+  },
+});
